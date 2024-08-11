@@ -24,6 +24,12 @@ export const TitleArea = styled.div`
     font-family: 'baloo 2', mono;
   }
 
+  h2 {
+    line-height: 1.3;
+    font-size: 2rem;
+    font-family: 'baloo 2', mono;
+  }
+
   p {
     line-height: 1.3;
     font-size: 1.25rem;
@@ -56,12 +62,12 @@ const INTRO_ITEMS_COLORS = {
 } as const
 
 interface IntroItemProps {
-  introItemColor: keyof typeof INTRO_ITEMS_COLORS
+  intoitemcolor: keyof typeof INTRO_ITEMS_COLORS
 }
 
 export const IntroItem = styled.span<IntroItemProps>`
   background: ${(props) =>
-    props.theme[INTRO_ITEMS_COLORS[props.introItemColor]]};
+    props.theme[INTRO_ITEMS_COLORS[props.intoitemcolor]]};
   color: ${(props) => props.theme.background};
 
   height: 2rem;
@@ -75,4 +81,12 @@ export const IntroItem = styled.span<IntroItemProps>`
   svg {
     margin: auto;
   }
+`
+
+export const CoffeeList = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 1rem;
+  row-gap: 4rem;
+  margin-top: 3rem;
 `
