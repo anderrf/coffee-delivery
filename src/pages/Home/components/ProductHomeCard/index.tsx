@@ -5,17 +5,17 @@ import {
   AddToCartButton,
   CardActions,
   CardTags,
-  ProductContainer,
+  ProductHomeCardContainer,
 } from './styles'
 
 interface ProductProps {
   coffee: CoffeeProduct
 }
 
-export function Product({ coffee }: ProductProps) {
+export function ProductHomeCard({ coffee }: ProductProps) {
   const { title, image, tags, description, unitPrice } = coffee
   return (
-    <ProductContainer>
+    <ProductHomeCardContainer>
       <img src={`src/assets/images/${image}`} />
       <h4>{title}</h4>
       <CardTags>
@@ -37,6 +37,6 @@ export function Product({ coffee }: ProductProps) {
           <ShoppingCart size={24} />
         </AddToCartButton>
       </CardActions>
-    </ProductContainer>
+    </ProductHomeCardContainer>
   )
 }

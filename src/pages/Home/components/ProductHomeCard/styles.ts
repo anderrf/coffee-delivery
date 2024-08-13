@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const ProductContainer = styled.div`
+export const ProductHomeCardContainer = styled.div`
   border: none;
   border-radius: 8px;
 

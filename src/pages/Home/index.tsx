@@ -8,7 +8,7 @@ import {
 import homeImage from './../../assets/images/home-image.png'
 import { Coffee, Package, ShoppingCart, Timer } from 'phosphor-react'
 import { v4 as uuidv4 } from 'uuid'
-import { Product } from './components/Product'
+import { ProductHomeCard } from './components/ProductHomeCard'
 
 export enum CoffeeTag {
   TRADICIONAL = 'TRADICIONAL',
@@ -27,7 +27,7 @@ export interface CoffeeProduct {
   image: string
 }
 
-const fixedCoffees: CoffeeProduct[] = [
+export const fixedCoffees: CoffeeProduct[] = [
   {
     id: uuidv4(),
     title: 'Expresso Tradicional',
@@ -188,7 +188,7 @@ export function Home() {
       <h2>Nossos cafés</h2>
       <CoffeeList>
         {fixedCoffees.map((coffee) => {
-          return <Product key={coffee.id} coffee={coffee} />
+          return <ProductHomeCard key={coffee.id} coffee={coffee} />
         })}
       </CoffeeList>
     </HomeContainer>
