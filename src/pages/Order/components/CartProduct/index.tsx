@@ -1,6 +1,5 @@
 import { Trash } from 'phosphor-react'
 import { ProductQuantity } from '../../../../components/ProductQuantity'
-import { CoffeeProduct } from '../../../Home'
 import {
   Price,
   ProductDisplayCol,
@@ -8,13 +7,16 @@ import {
   RemoveButton,
   SelectedProductContainer,
 } from './styles'
+import { SelectedProduct } from '../../../../contexts/CoffeesContext'
 
-interface SelectedProductProps {
-  product: CoffeeProduct
+interface CartProductProps {
+  selectedProduct: SelectedProduct
 }
 
-export function SelectedProduct({ product }: SelectedProductProps) {
-  const { unitPrice, image, title } = product
+export function CartProduct({ selectedProduct }: CartProductProps) {
+  const { product, quantity } = selectedProduct
+  const { image, title, unitPrice } = product
+
   return (
     <SelectedProductContainer>
       <ProductDisplayRow>
@@ -22,7 +24,7 @@ export function SelectedProduct({ product }: SelectedProductProps) {
         <ProductDisplayCol>
           <p>{title}</p>
           <ProductDisplayRow>
-            <ProductQuantity />
+            <ProductQuantity quantity={quantity} />
             <RemoveButton>
               <span>
                 <Trash size={20} />
@@ -32,7 +34,7 @@ export function SelectedProduct({ product }: SelectedProductProps) {
           </ProductDisplayRow>
         </ProductDisplayCol>
       </ProductDisplayRow>
-      <Price>R$ {unitPrice}</Price>
+      <Price>R$ {unitPrice * quantity}</Price>
     </SelectedProductContainer>
   )
 }

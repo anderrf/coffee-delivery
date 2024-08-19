@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import {
   ConfirmOrderButton,
   OrderSummaryContainer,
@@ -6,21 +6,25 @@ import {
   SummaryCard,
   TotalPriceInfo,
 } from './styles'
-import { fixedCoffees } from '../../../Home'
-import { SelectedProduct } from '../SelectedProduct'
+import { CartProduct } from '../CartProduct'
+import { CoffeesContext } from '../../../../contexts/CoffeesContext'
 
 export function OrderSummary() {
-  const [products, setProducts] = useState([fixedCoffees[0], fixedCoffees[1]])
-  const [productsTotal, setProductsTotal] = useState(0)
+  const { selectedProducts } = useContext(CoffeesContext)
+  const productsTotal = selectedProducts.length
+    ? selectedProducts
+        .map((product) => product.product.unitPrice)
+        .reduce((priceA, priceB) => priceA + priceB)
+    : 0
   const entrega = 3.5
-  const [orderTotal, setOrderTotal] = useState(0)
+  const orderTotal = productsTotal + entrega
   return (
     <OrderSummaryContainer>
       <h3>Cafés selecionados</h3>
       <SummaryCard>
         <SelectedProductsList>
-          {products.map((product) => {
-            return <SelectedProduct product={product} key={product.id} />
+          {selectedProducts.map((product) => {
+            return <CartProduct product={product} key={product.product.id} />
           })}
         </SelectedProductsList>
         <TotalPriceInfo>

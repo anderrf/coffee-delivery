@@ -1,5 +1,4 @@
 import { ShoppingCart } from 'phosphor-react'
-import { CoffeeProduct } from '../..'
 import { ProductQuantity } from '../../../../components/ProductQuantity'
 import {
   AddToCartButton,
@@ -7,6 +6,11 @@ import {
   CardTags,
   ProductHomeCardContainer,
 } from './styles'
+import { useContext, useState } from 'react'
+import {
+  CoffeeProduct,
+  CoffeesContext,
+} from '../../../../contexts/CoffeesContext'
 
 interface ProductProps {
   coffee: CoffeeProduct
@@ -14,6 +18,20 @@ interface ProductProps {
 
 export function ProductHomeCard({ coffee }: ProductProps) {
   const { title, image, tags, description, unitPrice } = coffee
+  const { addProductToCart } = useContext(CoffeesContext)
+  const [quantity, setQuantity] = useState(1)
+
+  const handleAddProductToCart = () => {
+    if (quantity < 1 || quantity > 99) {
+      return
+    }
+    const productToAdd = {
+      product: coffee,
+      quantity,
+    }
+    addProductToCart(productToAdd)
+    setQuantity(1)
+  }
   return (
     <ProductHomeCardContainer>
       <img src={`src/assets/images/${image}`} />
@@ -32,8 +50,8 @@ export function ProductHomeCard({ coffee }: ProductProps) {
         <label>
           R&#36;<span>{unitPrice}</span>
         </label>
-        <ProductQuantity></ProductQuantity>
-        <AddToCartButton>
+        <ProductQuantity quantity={quantity} setQuantity={setQuantity} />
+        <AddToCartButton onClick={handleAddProductToCart}>
           <ShoppingCart size={24} />
         </AddToCartButton>
       </CardActions>

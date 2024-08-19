@@ -62,12 +62,12 @@ const INTRO_ITEMS_COLORS = {
 } as const
 
 interface IntroItemProps {
-  intoitemcolor: keyof typeof INTRO_ITEMS_COLORS
+  introitemcolor: keyof typeof INTRO_ITEMS_COLORS
 }
 
 export const IntroItem = styled.span<IntroItemProps>`
   background: ${(props) =>
-    props.theme[INTRO_ITEMS_COLORS[props.intoitemcolor]]};
+    props.theme[INTRO_ITEMS_COLORS[props.introitemcolor]]};
   color: ${(props) => props.theme.background};
 
   height: 2rem;
