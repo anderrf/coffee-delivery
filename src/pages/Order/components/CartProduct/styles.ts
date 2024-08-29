@@ -56,6 +56,8 @@ export const RemoveButton = styled.button`
   padding: 0.5rem;
   line-height: 1.6;
 
+  cursor: pointer;
+
   :nth-child(1):is(span) {
     color: ${(props) => props.theme.purple};
   }

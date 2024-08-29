@@ -7,10 +7,8 @@ import {
   ProductHomeCardContainer,
 } from './styles'
 import { useContext, useState } from 'react'
-import {
-  CoffeeProduct,
-  CoffeesContext,
-} from '../../../../contexts/CoffeesContext'
+import { CoffeeProduct } from '../../../../reducers/Coffees/reducer'
+import { CoffeesContext } from '../../../../contexts/CoffeesContext'
 
 interface ProductProps {
   coffee: CoffeeProduct
@@ -48,7 +46,7 @@ export function ProductHomeCard({ coffee }: ProductProps) {
       <p>{description}</p>
       <CardActions>
         <label>
-          R&#36;<span>{unitPrice}</span>
+          R&#36;<span>{unitPrice.toFixed(2)}</span>
         </label>
         <ProductQuantity quantity={quantity} setQuantity={setQuantity} />
         <AddToCartButton onClick={handleAddProductToCart}>

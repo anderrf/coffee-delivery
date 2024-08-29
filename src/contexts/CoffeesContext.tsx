@@ -1,22 +1,22 @@
-import { createContext, ReactNode, useState } from 'react'
+import {
+  createContext,
+  ReactNode,
+  useEffect,
+  useReducer,
+  useState,
+} from 'react'
 import { v4 as uuidv4 } from 'uuid'
-
-export enum CoffeeTag {
-  TRADICIONAL = 'TRADICIONAL',
-  GELADO = 'GELADO',
-  COM_LEITE = 'COM LEITE',
-  ESPECIAL = 'ESPECIAL',
-  ALCOOLICO = 'ALCOÓLICO',
-}
-
-export interface CoffeeProduct {
-  id: string
-  title: string
-  description: string
-  tags: CoffeeTag[]
-  unitPrice: number
-  image: string
-}
+import {
+  CoffeeProduct,
+  coffeesReducer,
+  CoffeeTag,
+  SelectedProduct,
+} from '../reducers/Coffees/reducer'
+import {
+  addProductToCartAction,
+  editProductOnCartAction,
+  removeProductFromCartAction,
+} from '../reducers/Coffees/actions'
 
 function generateFixedCoffees() {
   return [
@@ -140,15 +140,12 @@ function generateFixedCoffees() {
   ]
 }
 
-export interface SelectedProduct {
-  product: CoffeeProduct
-  quantity: number
-}
-
 interface CoffeesContextType {
   availableProducts: CoffeeProduct[]
   selectedProducts: SelectedProduct[]
   addProductToCart: (product: SelectedProduct) => void
+  editProductOnCart: (product: SelectedProduct) => void
+  removeProductFromCart: (product: SelectedProduct) => void
 }
 
 export const CoffeesContext = createContext({} as CoffeesContextType)
@@ -160,6 +157,32 @@ interface CoffeesContextProviderProps {
 export function CoffeesContextProvider({
   children,
 }: CoffeesContextProviderProps) {
+  const [coffeesState, dispatch] = useReducer(
+    coffeesReducer,
+    {
+      selectedProducts: [],
+    },
+    (initialState) => {
+      const storedStateAsJSON = localStorage.getItem(
+        '@coffee-delivery:coffees-state-1.0.0',
+      )
+      if (storedStateAsJSON) {
+        return JSON.parse(storedStateAsJSON)
+      }
+
+      return initialState
+    },
+  )
+
+  const { selectedProducts } = coffeesState
+
+  useEffect(() => {
+    localStorage.setItem(
+      '@coffee-delivery:coffees-state-1.0.0',
+      JSON.stringify(coffeesState),
+    )
+  }, [coffeesState])
+
   const [availableProducts, setAvailableProducts] = useState<CoffeeProduct[]>(
     () => {
       const storedStateAsJSON = localStorage.getItem(
@@ -177,29 +200,33 @@ export function CoffeesContextProvider({
     },
   )
 
-  const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>(
-    () => {
-      const storedStateAsJSON = localStorage.getItem(
-        '@coffee-delivery:selected-products',
-      )
-      if (storedStateAsJSON) {
-        return JSON.parse(storedStateAsJSON)
-      }
-      return []
-    },
-  )
-
   const addProductToCart = (product: SelectedProduct) => {
     const sameProductIndex = selectedProducts.findIndex(
       (selectedProduct) => selectedProduct.product.id === product.product.id,
     )
     if (sameProductIndex >= 0) {
-      const productsOnCart = [...selectedProducts]
-      productsOnCart[sameProductIndex].quantity += product.quantity
-      setSelectedProducts([...productsOnCart])
+      dispatch(editProductOnCartAction(product))
       return
     }
-    setSelectedProducts([...selectedProducts, product])
+    dispatch(addProductToCartAction(product))
+  }
+
+  const editProductOnCart = (product: SelectedProduct) => {
+    const sameProductIndex = selectedProducts.findIndex(
+      (selectedProduct) => selectedProduct.product.id === product.product.id,
+    )
+    if (sameProductIndex >= 0) {
+      dispatch(editProductOnCartAction(product))
+    }
+  }
+
+  const removeProductFromCart = (product: SelectedProduct) => {
+    const sameProductIndex = selectedProducts.findIndex(
+      (selectedProduct) => selectedProduct.product.id === product.product.id,
+    )
+    if (sameProductIndex >= 0) {
+      dispatch(removeProductFromCartAction(product))
+    }
   }
 
   return (
@@ -208,6 +235,8 @@ export function CoffeesContextProvider({
         availableProducts,
         selectedProducts,
         addProductToCart,
+        editProductOnCart,
+        removeProductFromCart,
       }}
     >
       {children}
