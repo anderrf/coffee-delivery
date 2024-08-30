@@ -10,13 +10,16 @@ import {
   CoffeeProduct,
   coffeesReducer,
   CoffeeTag,
+  CreateOrderData,
   SelectedProduct,
 } from '../reducers/Coffees/reducer'
 import {
   addProductToCartAction,
   editProductOnCartAction,
+  finishOrderAction,
   removeProductFromCartAction,
 } from '../reducers/Coffees/actions'
+import { useNavigate } from 'react-router-dom'
 
 function generateFixedCoffees() {
   return [
@@ -143,9 +146,11 @@ function generateFixedCoffees() {
 interface CoffeesContextType {
   availableProducts: CoffeeProduct[]
   selectedProducts: SelectedProduct[]
+  orderData: CreateOrderData
   addProductToCart: (product: SelectedProduct) => void
   editProductOnCart: (product: SelectedProduct) => void
   removeProductFromCart: (product: SelectedProduct) => void
+  finishOrder: (data: CreateOrderData) => void
 }
 
 export const CoffeesContext = createContext({} as CoffeesContextType)
@@ -161,6 +166,7 @@ export function CoffeesContextProvider({
     coffeesReducer,
     {
       selectedProducts: [],
+      orderData: null,
     },
     (initialState) => {
       const storedStateAsJSON = localStorage.getItem(
@@ -174,7 +180,7 @@ export function CoffeesContextProvider({
     },
   )
 
-  const { selectedProducts } = coffeesState
+  const { selectedProducts, orderData } = coffeesState
 
   useEffect(() => {
     localStorage.setItem(
@@ -183,22 +189,20 @@ export function CoffeesContextProvider({
     )
   }, [coffeesState])
 
-  const [availableProducts, setAvailableProducts] = useState<CoffeeProduct[]>(
-    () => {
-      const storedStateAsJSON = localStorage.getItem(
-        '@coffee-delivery:available-products',
-      )
-      if (storedStateAsJSON) {
-        return JSON.parse(storedStateAsJSON)
-      }
-      const fixedCoffees = generateFixedCoffees()
-      localStorage.setItem(
-        '@coffee-delivery:available-products',
-        JSON.stringify(fixedCoffees),
-      )
-      return fixedCoffees
-    },
-  )
+  const [availableProducts] = useState<CoffeeProduct[]>(() => {
+    const storedStateAsJSON = localStorage.getItem(
+      '@coffee-delivery:available-products',
+    )
+    if (storedStateAsJSON) {
+      return JSON.parse(storedStateAsJSON)
+    }
+    const fixedCoffees = generateFixedCoffees()
+    localStorage.setItem(
+      '@coffee-delivery:available-products',
+      JSON.stringify(fixedCoffees),
+    )
+    return fixedCoffees
+  })
 
   const addProductToCart = (product: SelectedProduct) => {
     const sameProductIndex = selectedProducts.findIndex(
@@ -229,6 +233,13 @@ export function CoffeesContextProvider({
     }
   }
 
+  const navigate = useNavigate()
+
+  const finishOrder = (data: CreateOrderData) => {
+    dispatch(finishOrderAction(data))
+    navigate('/order')
+  }
+
   return (
     <CoffeesContext.Provider
       value={{
@@ -237,6 +248,8 @@ export function CoffeesContextProvider({
         addProductToCart,
         editProductOnCart,
         removeProductFromCart,
+        finishOrder,
+        orderData,
       }}
     >
       {children}

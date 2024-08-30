@@ -23,8 +23,20 @@ export interface SelectedProduct {
   quantity: number
 }
 
+export interface CreateOrderData {
+  zipcode: string
+  street: string
+  number: string
+  complement: string
+  neighborhood: string
+  city: string
+  state: string
+  paymentOption: string
+}
+
 interface CoffeesState {
   selectedProducts: SelectedProduct[]
+  orderData: CreateOrderData
 }
 
 export function coffeesReducer(
@@ -61,6 +73,11 @@ export function coffeesReducer(
         draft.selectedProducts.splice(productIndex, 1)
       })
     }
+    case ActionTypes.FINISH_ORDER:
+      return produce(state, (draft) => {
+        draft.selectedProducts = []
+        draft.orderData = action.payload?.orderData
+      })
     default:
       return state
   }

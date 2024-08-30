@@ -112,5 +112,9 @@ export const PaymentOptions = styled.div`
       color: ${(props) => props.theme['base-text']};
       margin-left: 1.5rem;
     }
+
+    &.selected {
+      border: 2px solid ${(props) => props.theme.purple};
+    }
   }
 `

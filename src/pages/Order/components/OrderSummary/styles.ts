@@ -33,6 +33,11 @@ export const ConfirmOrderButton = styled.button`
   font-size: 0.875rem;
   height: 2.875rem;
   cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
 `
 export const SelectedProductsList = styled.div`
   display: flex;

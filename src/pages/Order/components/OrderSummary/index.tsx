@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import {
   ConfirmOrderButton,
   OrderSummaryContainer,
@@ -9,7 +9,11 @@ import {
 import { CartProduct } from '../CartProduct'
 import { CoffeesContext } from '../../../../contexts/CoffeesContext'
 
-export function OrderSummary() {
+interface OrderSummaryProps {
+  isFormInvalid: boolean
+}
+
+export function OrderSummary({ isFormInvalid }: OrderSummaryProps) {
   const { selectedProducts } = useContext(CoffeesContext)
   const productsTotal = selectedProducts.length
     ? selectedProducts
@@ -50,7 +54,9 @@ export function OrderSummary() {
             </strong>
           </p>
         </TotalPriceInfo>
-        <ConfirmOrderButton>CONFIRMAR PEDIDO</ConfirmOrderButton>
+        <ConfirmOrderButton disabled={isFormInvalid} type="submit">
+          CONFIRMAR PEDIDO
+        </ConfirmOrderButton>
       </SummaryCard>
     </OrderSummaryContainer>
   )
