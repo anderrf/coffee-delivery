@@ -7,8 +7,27 @@ import {
 } from './styles'
 import deliveryMan from './../../assets/images/delivery-man.png'
 import { CurrencyDollar, MapPin, Timer } from 'phosphor-react'
+import { useContext } from 'react'
+import { CoffeesContext } from '../../contexts/CoffeesContext'
 
 export function Final() {
+  const { orderData } = useContext(CoffeesContext)
+  const { street, number, city, state, paymentOption } = orderData
+  let paymentOptionText
+  switch (paymentOption) {
+    case 'CREDITO':
+      paymentOptionText = 'Cartão de Crédito'
+      break
+    case 'DEBITO':
+      paymentOptionText = 'Cartão de Débito'
+      break
+    case 'DINHEIRO':
+      paymentOptionText = 'Dinheiro'
+      break
+    default:
+      paymentOptionText = 'Dinheiro'
+      break
+  }
   return (
     <FinalContainer>
       <h3>Uhu! Pedido confirmado</h3>
@@ -21,9 +40,12 @@ export function Final() {
                 <MapPin size={24} />
               </OrderFinalInfoIcon>
               <p>
-                Entrega em <strong>Rua João Daniel Martinelli, 102</strong>
+                Entrega em{' '}
+                <strong>
+                  {street}, {number}
+                </strong>
                 <br />
-                Farrapos - Porto Alegre, RS
+                {city} - {state}
               </p>
             </OrderFinalInfo>
             <OrderFinalInfo>
@@ -43,7 +65,7 @@ export function Final() {
               <p>
                 Pagamento na entrega
                 <br />
-                <strong>Cartão de Crédito</strong>
+                <strong>{paymentOptionText}</strong>
               </p>
             </OrderFinalInfo>
           </div>

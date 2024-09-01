@@ -8,7 +8,7 @@ import { CoffeesContext } from '../../contexts/CoffeesContext'
 import { useContext, useEffect, useState } from 'react'
 
 export function Order() {
-  const { finishOrder } = useContext(CoffeesContext)
+  const { finishOrder, selectedProducts } = useContext(CoffeesContext)
 
   const newOrderFormValidationSchema = zod.object({
     zipcode: zod.string().max(9).min(8),
@@ -48,7 +48,7 @@ export function Order() {
   const [isFormInvalid, setIsFormValid] = useState(false)
 
   useEffect(() => {
-    setIsFormValid(!formState.isValid)
+    setIsFormValid(!formState.isValid || !selectedProducts.length)
   }, [formWatch])
 
   return (

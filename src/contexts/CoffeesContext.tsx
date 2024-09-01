@@ -236,8 +236,9 @@ export function CoffeesContextProvider({
   const navigate = useNavigate()
 
   const finishOrder = (data: CreateOrderData) => {
+    console.log(data)
     dispatch(finishOrderAction(data))
-    navigate('/order')
+    navigate('/final')
   }
 
   return (

@@ -41,7 +41,7 @@ export function removeProductFromCartAction(productToRemove: SelectedProduct) {
 
 export function finishOrderAction(orderData: CreateOrderData) {
   return {
-    type: ActionTypes.REMOVE_PRODUCT_FROM_CART,
+    type: ActionTypes.FINISH_ORDER,
     payload: { orderData },
   }
 }

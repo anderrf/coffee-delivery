@@ -74,6 +74,7 @@ export function coffeesReducer(
       })
     }
     case ActionTypes.FINISH_ORDER:
+      console.log(action.payload)
       return produce(state, (draft) => {
         draft.selectedProducts = []
         draft.orderData = action.payload?.orderData
